@@ -30,7 +30,7 @@
                     <div x-show="openDropdown" @click.outside="openDropdown = false"
                         class="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-md py-2 z-50">
 
-                        <a href="{{ route('profile.edit') }}"
+                        <a href="{{ route('profile') }}"
                            class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                             Profile
                         </a>
@@ -79,7 +79,7 @@
             <div class="text-gray-800 font-semibold">{{ Auth::user()->name }}</div>
             <div class="text-gray-500 text-sm mb-3">{{ Auth::user()->email }}</div>
 
-            <a href="{{ route('profile.edit') }}"
+            <a href="{{ route('profile') }}"
                class="block text-gray-700 hover:text-blue-600">
                Profile
             </a>

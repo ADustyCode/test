@@ -163,20 +163,23 @@
                                         </p>
                                     </div>
 
-                                    <form method="POST" action="{{ route('employer.settings.profile.update') }}">
+                                    <form method="POST" action="{{ route('employer.settings.profile') }}">
                                         @csrf
                                         <div class="row g-3 mb-3">
                                             <div class="col-sm-8">
                                                 <label class="form-label">Nama perusahaan</label>
                                                 <input type="text" name="company_name" class="form-control"
-                                                    value="{{ old('company_name', $employer->company_name) }}" />
+                                                    value="{{ old('company_name', $employer->employerProfile->company_name ?? $employer->name) }}" />
                                             </div>
                                             <div class="col-sm-4">
                                                 <label class="form-label">Industri</label>
                                                 <select name="industry" class="form-select">
-                                                    <option {{ $employer->industry == 'Teknologi Informasi' ? 'selected' : '' }}>Teknologi Informasi</option>
-                                                    <option {{ $employer->industry == 'Finansial' ? 'selected' : '' }}>
-                                                        Finansial</option>
+                                                    <option value="">Pilih Industri</option>
+                                                    <option {{ (old('industry', $employer->employerProfile->industry ?? '') == 'Teknologi Informasi') ? 'selected' : '' }}>Teknologi Informasi</option>
+                                                    <option {{ (old('industry', $employer->employerProfile->industry ?? '') == 'Finansial') ? 'selected' : '' }}>Finansial</option>
+                                                    <option {{ (old('industry', $employer->employerProfile->industry ?? '') == 'Kesehatan') ? 'selected' : '' }}>Kesehatan</option>
+                                                    <option {{ (old('industry', $employer->employerProfile->industry ?? '') == 'Pendidikan') ? 'selected' : '' }}>Pendidikan</option>
+                                                    <option {{ (old('industry', $employer->employerProfile->industry ?? '') == 'Lainnya') ? 'selected' : '' }}>Lainnya</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -184,30 +187,33 @@
                                         <div class="row g-3 mb-3">
                                             <div class="col-sm-6">
                                                 <label class="form-label">Ukuran perusahaan</label>
-                                                <select class="form-select">
-                                                    <option>1–10 karyawan</option>
-                                                    <option>11–50 karyawan</option>
-                                                    <option>51–200 karyawan</option>
-                                                    <option>201–500 karyawan</option>
-                                                    <option>500+ karyawan</option>
+                                                <select name="size" class="form-select">
+                                                    <option value="">Pilih Ukuran</option>
+                                                    <option {{ (old('size', $employer->employerProfile->size ?? '') == '1–10 karyawan') ? 'selected' : '' }}>1–10 karyawan</option>
+                                                    <option {{ (old('size', $employer->employerProfile->size ?? '') == '11–50 karyawan') ? 'selected' : '' }}>11–50 karyawan</option>
+                                                    <option {{ (old('size', $employer->employerProfile->size ?? '') == '51–200 karyawan') ? 'selected' : '' }}>51–200 karyawan</option>
+                                                    <option {{ (old('size', $employer->employerProfile->size ?? '') == '201–500 karyawan') ? 'selected' : '' }}>201–500 karyawan</option>
+                                                    <option {{ (old('size', $employer->employerProfile->size ?? '') == '500+ karyawan') ? 'selected' : '' }}>500+ karyawan</option>
                                                 </select>
                                             </div>
                                             <div class="col-sm-6">
                                                 <label class="form-label">Tahun berdiri</label>
-                                                <input type="number" class="form-control" placeholder="2024" />
+                                                <input type="number" name="year_founded" class="form-control" placeholder="2024" 
+                                                    value="{{ old('year_founded', $employer->employerProfile->year_founded ?? '') }}" />
                                             </div>
                                         </div>
 
-                                        <div class="mb-3">
+                                         <div class="mb-3">
                                             <label class="form-label">Lokasi utama (HQ)</label>
-                                            <input type="text" class="form-control"
-                                                placeholder="Surabaya, Jawa Timur, Indonesia" />
+                                            <input type="text" name="location" class="form-control"
+                                                placeholder="Surabaya, Jawa Timur, Indonesia" 
+                                                value="{{ old('location', $employer->employerProfile->location ?? '') }}" />
                                         </div>
 
                                         <div class="mb-3">
                                             <label class="form-label">Deskripsi singkat perusahaan</label>
-                                            <textarea class="form-control" rows="4"
-                                                placeholder="Ceritakan secara singkat tentang perusahaan, produk, dan value yang kalian tawarkan kepada kandidat..."></textarea>
+                                            <textarea name="description" class="form-control" rows="4"
+                                                placeholder="Ceritakan secara singkat tentang perusahaan...">{{ old('description', $employer->employerProfile->description ?? '') }}</textarea>
                                             <div class="form-text-small mt-1">
                                                 Maksimal 500 karakter. Gunakan bahasa yang jelas dan langsung.
                                             </div>
@@ -216,13 +222,15 @@
                                         <div class="row g-3 mb-3">
                                             <div class="col-sm-6">
                                                 <label class="form-label">Website perusahaan</label>
-                                                <input type="url" class="form-control"
-                                                    placeholder="https://pentawork.id" />
+                                                <input type="url" name="website" class="form-control"
+                                                    placeholder="https://pentawork.id" 
+                                                    value="{{ old('website', $employer->employerProfile->website ?? '') }}" />
                                             </div>
                                             <div class="col-sm-6">
                                                 <label class="form-label">Email rekrutmen utama</label>
-                                                <input type="email" class="form-control"
-                                                    placeholder="careers@pentawork.id" />
+                                                <input type="email" name="recruitment_email" class="form-control"
+                                                    placeholder="careers@pentawork.id" 
+                                                    value="{{ old('recruitment_email', $employer->employerProfile->recruitment_email ?? '') }}" />
                                             </div>
                                         </div>
 
@@ -230,26 +238,28 @@
                                             <label class="form-label">Tautan media sosial</label>
                                             <div class="row g-2">
                                                 <div class="col-md-6">
-                                                    <input type="url" class="form-control"
-                                                        placeholder="LinkedIn perusahaan" />
+                                                    <input type="url" name="linkedin_link" class="form-control"
+                                                        placeholder="LinkedIn perusahaan" 
+                                                        value="{{ old('linkedin_link', $employer->employerProfile->linkedin_link ?? '') }}" />
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <input type="url" class="form-control"
-                                                        placeholder="Instagram / lainnya" />
+                                                    <input type="url" name="instagram_link" class="form-control"
+                                                        placeholder="Instagram / lainnya" 
+                                                        value="{{ old('instagram_link', $employer->employerProfile->instagram_link ?? '') }}" />
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="mb-3">
                                             <label class="form-label">Budaya & cara kerja (opsional)</label>
-                                            <textarea class="form-control" rows="3"
-                                                placeholder="Contoh: Kami menerapkan hybrid working, jam kerja fleksibel, dan rutin melakukan 1-on-1 untuk mendukung growth karyawan..."></textarea>
+                                            <textarea name="culture" class="form-control" rows="3"
+                                                placeholder="Contoh: Kami menerapkan hybrid working...">{{ old('culture', $employer->employerProfile->culture ?? '') }}</textarea>
                                         </div>
 
                                         <div class="d-flex justify-content-end gap-2">
-                                            <button type="button" class="btn btn-outline-secondary btn-sm">
+                                            <a href="{{ url()->previous() }}" class="btn btn-outline-secondary btn-sm">
                                                 Batal
-                                            </button>
+                                            </a>
                                              <button type="submit" class="btn btn-penta-primary text-white btn-sm">Simpan perubahan</button>
 
                                         </div>
@@ -268,7 +278,7 @@
                                     </div>
 
                                     <!-- Ubah email login -->
-                                    <form class="mb-4" method="POST" action="{{ route('employer.settings.security.update') }}">
+                                    <form class="mb-4" method="POST" action="{{ route('employer.settings.password') }}">
                                         @csrf
                                         <h6 class="mb-2">Email login</h6>
                                         <p class="form-text-small mb-2">
@@ -277,12 +287,12 @@
                                         <div class="row g-3">
                                             <div class="col-md-6">
                                                 <label class="form-label">Email saat ini</label>
-                                                <input type="email" class="form-control" value="{{ old('email', $employer->email) }}" 
+                                                <input type="email" class="form-control" value="{{ $employer->email }}" 
                                                     disabled />
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label">Email baru</label>
-                                                <<input type="email" name="email" value="{{ old('email', $employer->email) }}" />
+                                                <input type="email" name="email" class="form-control" value="{{ old('email', $employer->email) }}" />
                                             </div>
                                         </div>
                                         <div class="mt-3 d-flex justify-content-end">
@@ -293,24 +303,25 @@
                                     </form>
 
                                     <!-- Ubah password -->
-                                    <form class="mb-4">
+                                    <form class="mb-4" method="POST" action="{{ route('employer.settings.password') }}">
+                                        @csrf
                                         <h6 class="mb-2">Ubah password</h6>
                                         <p class="form-text-small mb-2">
                                             Gunakan password yang kuat minimal 8 karakter dengan kombinasi huruf besar,
-                                            kecil, angka, dan simbol. [web:71]
+                                            kecil, angka, dan simbol.
                                         </p>
                                         <div class="row g-3">
                                             <div class="col-md-4">
                                                 <label class="form-label">Password saat ini</label>
-                                                <input type="password" name="current_password" placeholder="Password saat ini" />
+                                                <input type="password" name="current_password" class="form-control" placeholder="Password saat ini" />
                                             </div>
                                             <div class="col-md-4">
                                                 <label class="form-label">Password baru</label>
-                                                <input type="password" name="password" placeholder="Password baru" />
+                                                <input type="password" name="password" class="form-control" placeholder="Password baru" />
                                             </div>
                                             <div class="col-md-4">
                                                 <label class="form-label">Konfirmasi password baru</label>
-                                                <input type="password" name="password_confirmation" placeholder="Konfirmasi password baru" />
+                                                <input type="password" name="password_confirmation" class="form-control" placeholder="Konfirmasi password baru" />
                                             </div>
                                         </div>
                                         <div class="mt-3 d-flex justify-content-end">

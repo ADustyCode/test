@@ -6,6 +6,9 @@ use App\Models\Application;
 use App\Models\Notification;
 use App\Models\Job;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewApplicationMail;
+use App\Mail\ApplicationAcceptedMail;
 
 class ApplicationController extends Controller
 {
@@ -50,6 +53,11 @@ class ApplicationController extends Controller
             'message' => "Lamaran Anda untuk posisi {$application->job->title} telah {$request->status} oleh {$application->job->employer->name}.",
             'type' => $request->status === 'accepted' ? 'success' : 'warning',
         ]);
+
+        // Kirim email jika diterima
+        if ($request->status === 'accepted') {
+            Mail::to($application->jobseeker->email)->send(new ApplicationAcceptedMail($application));
+        }
 
         return back()->with('success', 'Status pelamar berhasil diperbarui.');
     }
@@ -97,6 +105,9 @@ class ApplicationController extends Controller
             'message' => auth()->user()->name . " baru saja melamar untuk posisi {$job->title}.",
             'type' => 'info',
         ]);
+
+        // Kirim email ke employer
+        Mail::to($job->employer->email)->send(new NewApplicationMail($application));
 
         return back()->with('success', 'Lamaran berhasil dikirim.');
     }

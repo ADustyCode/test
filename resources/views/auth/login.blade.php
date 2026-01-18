@@ -384,7 +384,7 @@
             </div>
 
             <div class="forgot-row">
-              <a href="#">Forgot password</a>
+              <a href="{{ route('password.request') }}">Forgot password</a>
             </div>
 
             <button type="submit" class="primary-btn btn btn-primary w-100">

@@ -14,6 +14,7 @@ use App\Mail\SendEmail; // tambahkan ini
 use App\Http\Controllers\JobseekerProfileController;
 use App\Http\Controllers\JobseekerSettingsController;
 use App\Http\Controllers\EmployerSettingsController;
+use App\Http\Controllers\EmployerProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,24 +30,39 @@ Route::get('/', function () {
 
 
 
-Route::middleware(['auth', 'verified', 'role:employer'])->group(function () {
-    Route::get('/employer/settings', [EmployerSettingsController::class, 'index'])->name('employer.settings.index');
-    Route::post('/employer/settings/profile', [EmployerSettingsController::class, 'updateProfile'])->name('employer.settings.profile.update');
-    Route::post('/employer/settings/security', [EmployerSettingsController::class, 'updateSecurity'])->name('employer.settings.security.update');
+Route::middleware(['auth', 'verified', 'role:employer'])->prefix('employer')
+    ->name('employer.')->group(function () {
+    Route::get('/settings', [EmployerSettingsController::class, 'index'])->name('index');
+    Route::post('/settings/profile', [EmployerSettingsController::class, 'updateProfile'])->name('settings.profile');
+    Route::post('/settings/password', [EmployerSettingsController::class, 'updatePassword'])->name('settings.password');
 });
 Route::middleware(['auth', 'verified', 'role:jobseeker'])
     ->prefix('jobseeker')
     ->name('jobseeker.')
     ->group(function () {
         Route::get('/settings', [JobseekerSettingsController::class, 'index'])
-            ->name('settings');
 
+            ->name('settings');
         Route::post('/settings/profile', [JobseekerSettingsController::class, 'updateProfile'])
             ->name('settings.profile');
 
         Route::post('/settings/password', [JobseekerSettingsController::class, 'updatePassword'])
             ->name('settings.password');
     });
+
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/employer/profile', [EmployerProfileController::class, 'show'])
+        ->name('employer.profile.show');
+
+    Route::get('/employer/profile/edit', [EmployerProfileController::class, 'edit'])
+        ->name('employer.profile.edit');
+
+    Route::put('/employer/profile', [EmployerProfileController::class, 'update'])
+        ->name('employer.profile.update');
+
+});
+
 
 
 
@@ -57,7 +73,14 @@ Route::middleware(['auth', 'verified', 'role:jobseeker'])
 */
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::get('/profile', [JobseekerProfileController::class, 'show'])
+    Route::get('/profile', function () {
+        if (auth()->user()->user_type === 'employer') {
+            return redirect()->route('employer.profile.show');
+        }
+        return redirect()->route('jobseeker.profile.show');
+    })->name('profile');
+
+    Route::get('/jobseeker/profile', [JobseekerProfileController::class, 'show'])
         ->name('jobseeker.profile.show');
 
     Route::get('/profile/edit', [JobseekerProfileController::class, 'edit'])

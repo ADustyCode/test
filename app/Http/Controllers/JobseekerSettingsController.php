@@ -14,20 +14,28 @@ class JobseekerSettingsController extends Controller
     public function updateProfile(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20',
+            'name'     => 'required|string|max:255',
+            'phone'    => 'nullable|string|max:20',
             'location' => 'nullable|string|max:255',
-            'summary' => 'nullable|string|max:500',
+            'summary'  => 'nullable|string|max:500',
         ]);
 
         $user = auth()->user();
 
+        // Update User info
         $user->update([
-            'name' => $request->name,
+            'name'  => $request->name,
             'phone' => $request->phone,
-            'location' => $request->location,
-            'summary' => $request->summary,
         ]);
+
+        // Update or Create Jobseeker Profile info
+        \App\Models\JobseekerProfile::updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'location' => $request->location,
+                'summary'  => $request->summary,
+            ]
+        );
 
         return back()->with('success', 'Profil berhasil diperbarui');
     }

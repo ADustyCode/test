@@ -19,40 +19,43 @@ class EmployerSettingsController extends Controller
     public function updateProfile(Request $request)
     {
         $request->validate([
-            'company_name' => 'required|string|max:255',
-            'industry' => 'nullable|string|max:255',
-            'size' => 'nullable|string|max:50',
-            'year_founded' => 'nullable|integer|min:1800|max:' . date('Y'),
-            'location' => 'nullable|string|max:255',
-            'description' => 'nullable|string|max:500',
-            'website' => 'nullable|url|max:255',
+            'company_name'      => 'required|string|max:255',
+            'industry'          => 'nullable|string|max:255',
+            'size'              => 'nullable|string|max:50',
+            'year_founded'      => 'nullable|integer|min:1800|max:' . date('Y'),
+            'location'          => 'nullable|string|max:255',
+            'description'       => 'nullable|string|max:500',
+            'website'           => 'nullable|url|max:255',
             'recruitment_email' => 'nullable|email|max:255',
-            'linkedin_link' => 'nullable|url|max:255',
-            'instagram_link' => 'nullable|url|max:255',
-            'culture' => 'nullable|string|max:500',
+            'linkedin_link'     => 'nullable|url|max:255',
+            'instagram_link'    => 'nullable|url|max:255',
+            'culture'           => 'nullable|string|max:500',
         ]);
 
-        $employer = Auth::user();
+        $user = Auth::user();
 
-        $employer->update([
-            'company_name' => $request->company_name,
-            'industry' => $request->industry,
-            'size' => $request->size,
-            'year_founded' => $request->year_founded,
-            'location' => $request->location,
-            'description' => $request->description,
-            'website' => $request->website,
-            'recruitment_email' => $request->recruitment_email,
-            'linkedin_link' => $request->linkedin_link,
-            'instagram_link' => $request->instagram_link,
-            'culture' => $request->culture,
-        ]);
+        \App\Models\EmployerProfile::updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'company_name'      => $request->company_name,
+                'industry'          => $request->industry,
+                'size'              => $request->size,
+                'year_founded'      => $request->year_founded,
+                'location'          => $request->location,
+                'description'       => $request->description,
+                'website'           => $request->website,
+                'recruitment_email' => $request->recruitment_email,
+                'linkedin_link'     => $request->linkedin_link,
+                'instagram_link'    => $request->instagram_link,
+                'culture'           => $request->culture,
+            ]
+        );
 
         return back()->with('success', 'Profil perusahaan berhasil diperbarui.');
     }
 
     // Update keamanan akun
-    public function updateSecurity(Request $request)
+    public function updatePassword(Request $request)
     {
         $user = Auth::user();
 

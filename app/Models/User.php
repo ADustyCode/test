@@ -23,6 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'user_type',
+        'phone',
     ];
 
     /**
@@ -60,9 +61,15 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     public function jobseekerProfile()
-{
-    return $this->hasOne(JobseekerProfile::class);
-}
+    {
+        return $this->hasOne(JobseekerProfile::class);
+    }
+
+    public function employerProfile()
+    {
+        return $this->hasOne(EmployerProfile::class);
+    }
+
 
 
     /**
@@ -72,9 +79,9 @@ class User extends Authenticatable implements MustVerifyEmail
     public function pushNotification($title, $message, $type = null)
     {
         return $this->notifications()->create([
-            'title'   => $title,
+            'title' => $title,
             'message' => $message,
-            'type'    => $type,
+            'type' => $type,
             'is_read' => false,
         ]);
     }

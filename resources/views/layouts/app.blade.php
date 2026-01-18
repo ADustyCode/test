@@ -71,8 +71,8 @@
               </a>
             </li>
             <li>
-              <a class="dropdown-item" href="{{ auth()->user()->role === 'employer'
-        ? route('employer.settings')
+              <a class="dropdown-item" href="{{ auth()->user()->user_type === 'employer'
+        ? route('employer.index')
         : route('jobseeker.settings')
     }}">
                 Pengaturan
@@ -123,7 +123,6 @@
               href="{{ route('applications.my') }}">
               Lamaran Saya
             </a>
-            <a class="nav-link text-white" href="#">Lowongan Tersimpan</a>
           @else
             <a class="nav-link text-white" href="{{ route('jobs.index') }}">Lowongan Saya</a>
           @endif

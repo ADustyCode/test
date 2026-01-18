@@ -60,14 +60,14 @@
                       <label class="form-label">Domisili</label>
                       <input type="text" class="form-control"
                         name="location"
-                        value="{{ old('location', auth()->user()->location) }}">
+                        value="{{ old('location', auth()->user()->jobseekerProfile->location ?? '') }}">
                     </div>
                   </div>
 
                   <div class="mb-3">
                     <label class="form-label">Ringkasan Profil</label>
                     <textarea class="form-control" rows="3"
-                      name="summary">{{ old('summary', auth()->user()->summary) }}</textarea>
+                      name="summary">{{ old('summary', auth()->user()->jobseekerProfile->summary ?? '') }}</textarea>
                     <small class="text-muted">Maksimal 500 karakter</small>
                   </div>
 

@@ -85,10 +85,23 @@
                                         </button>
                                     </form>
 
-                                    <a href="mailto://{{ $application->jobseeker->email }}"
-                                        class="btn btn-sm btn-outline-primary">
-                                        Hubungi
-                                    </a>
+                                    @php
+                                        $phone = $application->jobseeker->phone;
+                                        $whatsappUrl = $phone ? 'https://wa.me/' . preg_replace('/[^0-9]/', '', $phone) : null;
+                                        $mailtoUrl = 'mailto:' . $application->jobseeker->email;
+                                    @endphp
+
+                                    @if($phone)
+                                        <a href="{{ $whatsappUrl }}" target="_blank"
+                                            class="btn btn-sm btn-outline-success">
+                                            Hubungi (WA)
+                                        </a>
+                                    @else
+                                        <a href="{{ $mailtoUrl }}"
+                                            class="btn btn-sm btn-outline-primary">
+                                            Hubungi (Email)
+                                        </a>
+                                    @endif
 
                                 </div>
                             </td>
