@@ -378,8 +378,8 @@
             <div class="field mb-2">
               <label class="form-label">Password</label>
               <div class="input-wrap">
-                <input type="password" class="form-control" placeholder="Password" name="password">
-                <div class="eye-icon">👁</div>
+                <input type="password" class="form-control" placeholder="Password" name="password" id="passwordInput">
+                <div class="eye-icon" id="togglePassword">👁</div>
               </div>
             </div>
 
@@ -400,5 +400,19 @@
 
   <!-- Bootstrap JS (opsional) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> <!-- [web:44] -->
+
+  <script>
+    const togglePassword = document.querySelector('#togglePassword');
+    const password = document.querySelector('#passwordInput');
+
+    togglePassword.addEventListener('click', function (e) {
+      // toggle the type attribute
+      const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+      password.setAttribute('type', type);
+      
+      // toggle the eye icon (optional)
+      // this.textContent = type === 'password' ? '👁' : '🙈'; // Uncomment if you want to change icon
+    });
+  </script>
 </body>
 </html>
