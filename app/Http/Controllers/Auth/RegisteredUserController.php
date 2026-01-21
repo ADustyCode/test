@@ -36,8 +36,10 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $type = $request->routeIs('register-company') ? 'employer' : 'jobseeker';
+        dd($request);
 
+        $type = $request->routeIs('register-company') ? 'employer' : 'jobseeker';
+        dd($type);
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => [
